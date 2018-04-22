@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class HoverMotor : MonoBehaviour
 {
-
     public float speed = 90f;
     public float turnSpeed = 5f;
     public float hoverForce = 65f;
@@ -12,6 +12,7 @@ public class HoverMotor : MonoBehaviour
     private float turnInput;
     private Rigidbody carRigidbody;
 
+    public bool MovedByAi;
 
     void Awake()
     {
@@ -36,8 +37,35 @@ public class HoverMotor : MonoBehaviour
             carRigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
         }
 
-        carRigidbody.AddRelativeForce(0f, 0f, powerInput * speed);
-        carRigidbody.AddRelativeTorque(0f, turnInput * turnSpeed, 0f);
+        if (!CardGameManager.Instance.IsGameRunning)
+        {
+            return;
+        }
 
+        if (!MovedByAi)
+        {
+            carRigidbody.AddRelativeForce(0f, 0f, powerInput * speed);
+            carRigidbody.AddRelativeTorque(0f, turnInput * turnSpeed, 0f);
+        }
+    }
+
+    internal void Input_SteerLeft()
+    {
+        carRigidbody.AddRelativeTorque(0f, -1 * turnSpeed, 0f);
+    }
+
+    internal void Input_SteerRight()
+    {
+        carRigidbody.AddRelativeTorque(0f, 1 * turnSpeed, 0f);
+    }
+
+    internal void Input_SteerAccelerate()
+    {
+        carRigidbody.AddRelativeForce(0f, 0f, 1 * speed);
+    }
+
+    internal void Input_SteerBrake()
+    {
+        carRigidbody.AddRelativeForce(0f, 0f, -1 * speed);
     }
 }

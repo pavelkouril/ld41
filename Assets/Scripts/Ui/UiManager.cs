@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +45,9 @@ public class UiManager : Singleton<UiManager>
     [SerializeField]
     private Image _image_UnitP2;
 
+    [SerializeField]
+    private Text _text_Countdown;
+
     private void Start()
     {
         _text_ActiveUnitPlayer1.text = string.Empty;
@@ -51,6 +55,12 @@ public class UiManager : Singleton<UiManager>
         _image_UnitP2.gameObject.SetActive(false);
         _text_ActiveUnitPlayer2.text = string.Empty;
         _text_WinLose.text = string.Empty;
+    }
+
+    internal void DisplayCountDown(int i)
+    {
+        _text_Countdown.text = i > 0 ? i.ToString() : "Start!";
+        _text_Countdown.GetComponent<Animator>().Play("CountdownText", -1, 0);
     }
 
     private void Update()
@@ -103,5 +113,8 @@ public class UiManager : Singleton<UiManager>
     public void SetWinLoseText(string text)
     {
         _text_WinLose.text = text;
+
+        _slider_LpPlayer1.value = PlayerManager.Instance.Player1.LifePoints / 10f;
+        _slider_LpPlayer2.value = PlayerManager.Instance.Player2.LifePoints / 10f;
     }
 }

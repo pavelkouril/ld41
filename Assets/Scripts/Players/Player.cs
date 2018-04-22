@@ -15,6 +15,13 @@ public class Player : MonoBehaviour
 
     public Transform HandParent;
 
+    public HoverMotor Vehicle { get; internal set; }
+
+    private void Awake()
+    {
+        Vehicle = GetComponent<HoverMotor>();
+    }
+
     public void DestroyMonster()
     {
         MoveToGraveyard(ActiveUnit);
@@ -25,7 +32,10 @@ public class Player : MonoBehaviour
     {
         Hand.Remove(card);
         StartCoroutine(AnimateCardOut(card, -1, 0.5f));
-        Destroy(card.gameObject, 2f);
+        if (card.gameObject != null)
+        {
+            Destroy(card.gameObject, 2f);
+        }
     }
 
     private IEnumerator AnimateCardOut(Card card, int dir, float dur)
@@ -58,6 +68,12 @@ public class Player : MonoBehaviour
     {
         Hand.Remove(card);
         StartCoroutine(AnimateCardOut(card, 1, 0.5f));
+        StartCoroutine(WaitForActiveCardSet(card, 0.5f));
+    }
+
+    private IEnumerator WaitForActiveCardSet(Card card, float v)
+    {
+        yield return new WaitForSeconds(v);
         ActiveUnit = card;
     }
 
@@ -112,7 +128,7 @@ public class Player : MonoBehaviour
             if (x.CanUseEffect(this))
             {
                 UnSelectCard(c);
-                x.Effect(this);
+                StartCoroutine(ActivateEffectAfter(x, 0.5f));
                 MoveToGraveyard(c);
                 return true;
             }
@@ -127,6 +143,12 @@ public class Player : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private IEnumerator ActivateEffectAfter(SupportCard x, float v)
+    {
+        yield return new WaitForSeconds(v);
+        x.Effect(this);
     }
 
     public void TakeDamage(int v)

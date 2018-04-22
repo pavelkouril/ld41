@@ -52,8 +52,9 @@ public class CardGameManager : Singleton<CardGameManager>
 
     private IEnumerator CountDownToStartGame(int v)
     {
-        for (int i = 0; i < v; i++)
+        for (int i = v; i >= 0; --i)
         {
+            UiManager.Instance.DisplayCountDown(i);
             yield return new WaitForSeconds(1);
         }
         StartGame();
@@ -100,11 +101,6 @@ public class CardGameManager : Singleton<CardGameManager>
         if (CurrentPhase != TurnPhase.Main && CurrentPhase != TurnPhase.Battle)
         {
             err = "Can only move to next phase from MP or BP.";
-            return false;
-        }
-        if (player.ActiveUnit == null)
-        {
-            err = "Cannot go to BP without a active unit card.";
             return false;
         }
         if (IsFirstTurn)
@@ -264,7 +260,7 @@ public class CardGameManager : Singleton<CardGameManager>
         _currentPlayer = PlayerManager.Instance.GetOpponentOf(_currentPlayer);
     }
 
-    private void EndTurn()
+    public void EndTurn()
     {
         _currentPhase = TurnPhase.Begin;
         // remove random cards if we have more than 4 in hand after end of our turn

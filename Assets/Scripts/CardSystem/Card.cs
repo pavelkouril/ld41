@@ -52,7 +52,7 @@ public class Card : MonoBehaviour
         var sup = _proto as SupportCard;
         if (sup != null)
         {
-            _text_Eff.text = "";
+            _text_Eff.text = sup.Text;
         }
     }
 }

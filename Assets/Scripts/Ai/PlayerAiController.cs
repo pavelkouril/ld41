@@ -77,6 +77,7 @@ public class PlayerAiController : MonoBehaviour
             c._animator.Play("UseCard");
         }
 
+
         string str;
         CardGameManager.Instance.Input_NextPhase(p, out str);
         StartCoroutine(StartCoolDown(1));
@@ -114,9 +115,12 @@ public class PlayerAiController : MonoBehaviour
             if (p.ActiveUnit.Position == UnitCardPosition.Def)
             {
                 CardGameManager.Instance.Input_SwitchBattlePos(p, UnitCardPosition.Attack);
-                StartCoroutine(StartCoolDown(0.5f));
+                StartCoroutine(StartCoolDown(1f));
             }
-            CardGameManager.Instance.Input_DeclareAttack(p);
+            else
+            {
+                CardGameManager.Instance.Input_DeclareAttack(p);
+            }
         }
         else
         {
@@ -125,20 +129,25 @@ public class PlayerAiController : MonoBehaviour
                 if (p.ActiveUnit.Position == UnitCardPosition.Def)
                 {
                     CardGameManager.Instance.Input_SwitchBattlePos(p, UnitCardPosition.Attack);
-                    StartCoroutine(StartCoolDown(0.5f));
+                    StartCoroutine(StartCoolDown(1f));
                 }
-                CardGameManager.Instance.Input_DeclareAttack(p);
+                else
+                {
+                    CardGameManager.Instance.Input_DeclareAttack(p);
+                }
             }
             else if (p.ActiveUnit.Position == UnitCardPosition.Attack)
             {
                 CardGameManager.Instance.Input_SwitchBattlePos(p, UnitCardPosition.Def);
-                StartCoroutine(StartCoolDown(0.5f));
+                StartCoroutine(StartCoolDown(2f));
             }
-
-            if (p.ActiveUnit.Position == op.ActiveUnit.Position)
+            else
             {
-                string str;
-                CardGameManager.Instance.Input_NextPhase(p, out str);
+                if (p.ActiveUnit.Position == op.ActiveUnit.Position)
+                {
+                    string str;
+                    CardGameManager.Instance.Input_NextPhase(p, out str);
+                }
             }
         }
     }
