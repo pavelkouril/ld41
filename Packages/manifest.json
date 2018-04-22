@@ -1,6 +1,9 @@
 {
-    "dependencies": {
-        "com.unity.incrementalcompiler": "0.0.36"
-    },
-    "registry": "https://staging-packages.unity.com"
+  "dependencies": {
+    "com.unity.incrementalcompiler": "0.0.36",
+    "com.unity.package-manager-ui": "1.9.3",
+    "com.unity.postprocessing": "2.0.5-preview",
+    "com.unity.probuilder": "4.0.0-preview.0"
+  },
+  "registry": "https://staging-packages.unity.com"
 }
